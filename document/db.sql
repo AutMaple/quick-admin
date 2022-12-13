@@ -94,13 +94,27 @@ values ('/auth/deleteUser/**', '删除用户');
 insert into auth_permission(permission, `description`)
 values ('/auth/getUsers/**', '分页查询用户');
 
-INSERT INTO quick_admin.auth_user (id, username, password, email, gender) VALUES (1, 'AutMaple', '$2a$10$p3vrOPqOtjEgZt/WhP5/AuYzDcSjWvNBRUAKdhNK2qntu8pxknFp6', 'autmaple609@qq.com', b'00');
-INSERT INTO quick_admin.auth_user (id, username, password, email, gender) VALUES (2, 'Irvin', '$2a$10$p3vrOPqOtjEgZt/WhP5/AuYzDcSjWvNBRUAKdhNK2qntu8pxknFp6', 'irvin1111@qq.com', b'00');
+INSERT INTO quick_admin.auth_user (username, password, email, gender)
+VALUES ('AutMaple', '$2a$10$p3vrOPqOtjEgZt/WhP5/AuYzDcSjWvNBRUAKdhNK2qntu8pxknFp6', 'autmaple609@qq.com', b'00');
+INSERT INTO quick_admin.auth_user (username, password, email, gender)
+VALUES ('Irvin', '$2a$10$p3vrOPqOtjEgZt/WhP5/AuYzDcSjWvNBRUAKdhNK2qntu8pxknFp6', 'irvin1111@qq.com', b'00');
 
-INSERT INTO quick_admin.auth_role_permission (id, role_id, permission_id) VALUES (1, 1, 2);
-INSERT INTO quick_admin.auth_role_permission (id, role_id, permission_id) VALUES (2, 6, 1);
-INSERT INTO quick_admin.auth_role_permission (id, role_id, permission_id) VALUES (3, 6, 2);
-INSERT INTO quick_admin.auth_role_permission (id, role_id, permission_id) VALUES (4, 6, 3);
-INSERT INTO quick_admin.auth_role_permission (id, role_id, permission_id) VALUES (5, 6, 4);
-INSERT INTO quick_admin.auth_role_permission (id, role_id, permission_id) VALUES (6, 6, 5);
-INSERT INTO quick_admin.auth_role_permission (id, role_id, permission_id) VALUES (7, 6, 6);
+INSERT INTO quick_admin.auth_role_permission (id, role_id, permission_id)
+VALUES (1, 1, 2);
+INSERT INTO quick_admin.auth_role_permission (id, role_id, permission_id)
+VALUES (2, 2, 1);
+INSERT INTO quick_admin.auth_role_permission (id, role_id, permission_id)
+VALUES (3, 2, 2);
+INSERT INTO quick_admin.auth_role_permission (id, role_id, permission_id)
+VALUES (4, 2, 3);
+INSERT INTO quick_admin.auth_role_permission (id, role_id, permission_id)
+VALUES (5, 2, 4);
+INSERT INTO quick_admin.auth_role_permission (id, role_id, permission_id)
+VALUES (6, 2, 5);
+INSERT INTO quick_admin.auth_role_permission (id, role_id, permission_id)
+VALUES (7, 2, 6);
+
+select p.permission, r.role
+from auth_permission p
+         left join auth_role_permission rp on p.id = rp.permission_id
+         left join auth_role r on rp.role_id = r.id;
