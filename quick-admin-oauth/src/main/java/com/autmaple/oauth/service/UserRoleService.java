@@ -9,7 +9,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * </p>
  *
  * @author AutMaple
- * @since 2022-12-12
+ * @since 2022-12-13
  */
 public interface UserRoleService extends IService<UserRole> {
 

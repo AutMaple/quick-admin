@@ -10,7 +10,7 @@ import org.apache.ibatis.annotations.Mapper;
  * </p>
  *
  * @author AutMaple
- * @since 2022-12-12
+ * @since 2022-12-13
  */
 @Mapper
 public interface RoleMapper extends BaseMapper<Role> {

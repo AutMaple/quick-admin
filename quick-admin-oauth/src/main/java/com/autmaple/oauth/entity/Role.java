@@ -15,7 +15,7 @@ import lombok.Setter;
  * </p>
  *
  * @author AutMaple
- * @since 2022-12-12
+ * @since 2022-12-13
  */
 @Getter
 @Setter
@@ -25,7 +25,7 @@ public class Role implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @Schema(description = "id")
+    @Schema(description = "ID")
     @TableId(value = "id", type = IdType.AUTO)
     private Long id;
 

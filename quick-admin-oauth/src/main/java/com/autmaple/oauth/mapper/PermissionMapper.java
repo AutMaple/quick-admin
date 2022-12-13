@@ -1,8 +1,11 @@
 package com.autmaple.oauth.mapper;
 
 import com.autmaple.oauth.entity.Permission;
+import com.autmaple.oauth.model.PermissionRoles;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
+
+import java.util.List;
 
 /**
  * <p>
@@ -10,9 +13,12 @@ import org.apache.ibatis.annotations.Mapper;
  * </p>
  *
  * @author AutMaple
- * @since 2022-12-12
+ * @since 2022-12-13
  */
 @Mapper
 public interface PermissionMapper extends BaseMapper<Permission> {
-
+    /**
+     * 获取每个资源可被什么角色所操作
+     */
+    List<PermissionRoles> getPermissionRoles();
 }

@@ -1,4 +1,4 @@
-package com.autmaple.oauth;
+package com.autmaple;
 
 import com.baomidou.mybatisplus.generator.FastAutoGenerator;
 import com.baomidou.mybatisplus.generator.config.OutputFile;
@@ -22,7 +22,7 @@ public class Generator {
         // 模块名
         String moduleName = "/quick-admin-oauth/";
         // mapper对应的 xml 文件存放的位置
-        String mapperXmlLocation = System.getProperty("user.dir") + moduleName + "src/main/resources";
+        String mapperXmlLocation = System.getProperty("user.dir") + moduleName + "src/main/resources/mapper";
         String baseLocation = System.getProperty("user.dir") + moduleName + "src/main/java";
         FastAutoGenerator.create(url, username, password)
                 .globalConfig(builder -> {

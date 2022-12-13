@@ -57,3 +57,50 @@ CREATE TABLE `auth_role_permission`
 ) ENGINE = INNODB
   DEFAULT CHARSET = UTF8MB4
   ROW_FORMAT = DYNAMIC COMMENT = '角色权限关联表';
+
+
+insert into auth_role(role)
+values ('admin');
+insert into auth_role(role)
+values ('teacher');
+insert into auth_role(role)
+values ('student');
+insert into auth_role(role)
+values ('primary');
+insert into auth_role(role)
+values ('monitor');
+
+insert into auth_user_role(user_id, role_id)
+values (1, 2);
+insert into auth_user_role(user_id, role_id)
+values (1, 4);
+insert into auth_user_role(user_id, role_id)
+values (1, 6);
+insert into auth_user_role(user_id, role_id)
+values (2, 1);
+insert into auth_user_role(user_id, role_id)
+values (2, 3);
+insert into auth_user_role(user_id, role_id)
+values (2, 5);
+
+insert into auth_permission(permission, `description`)
+values ('/auth/addUser/**', '添加用户');
+insert into auth_permission(permission, `description`)
+values ('/auth/getUser/**', '查询用户');
+insert into auth_permission(permission, `description`)
+values ('/auth/updateUser/**', '更新用户');
+insert into auth_permission(permission, `description`)
+values ('/auth/deleteUser/**', '删除用户');
+insert into auth_permission(permission, `description`)
+values ('/auth/getUsers/**', '分页查询用户');
+
+INSERT INTO quick_admin.auth_user (id, username, password, email, gender) VALUES (1, 'AutMaple', '$2a$10$p3vrOPqOtjEgZt/WhP5/AuYzDcSjWvNBRUAKdhNK2qntu8pxknFp6', 'autmaple609@qq.com', b'00');
+INSERT INTO quick_admin.auth_user (id, username, password, email, gender) VALUES (2, 'Irvin', '$2a$10$p3vrOPqOtjEgZt/WhP5/AuYzDcSjWvNBRUAKdhNK2qntu8pxknFp6', 'irvin1111@qq.com', b'00');
+
+INSERT INTO quick_admin.auth_role_permission (id, role_id, permission_id) VALUES (1, 1, 2);
+INSERT INTO quick_admin.auth_role_permission (id, role_id, permission_id) VALUES (2, 6, 1);
+INSERT INTO quick_admin.auth_role_permission (id, role_id, permission_id) VALUES (3, 6, 2);
+INSERT INTO quick_admin.auth_role_permission (id, role_id, permission_id) VALUES (4, 6, 3);
+INSERT INTO quick_admin.auth_role_permission (id, role_id, permission_id) VALUES (5, 6, 4);
+INSERT INTO quick_admin.auth_role_permission (id, role_id, permission_id) VALUES (6, 6, 5);
+INSERT INTO quick_admin.auth_role_permission (id, role_id, permission_id) VALUES (7, 6, 6);

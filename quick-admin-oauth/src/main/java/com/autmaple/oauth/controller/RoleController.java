@@ -9,7 +9,7 @@ import org.springframework.stereotype.Controller;
  * </p>
  *
  * @author AutMaple
- * @since 2022-12-12
+ * @since 2022-12-13
  */
 @Controller
 @RequestMapping("/oauth/role")
