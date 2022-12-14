@@ -10,7 +10,10 @@ import org.springframework.security.core.GrantedAuthority;
 
 import java.util.Collection;
 
-public class CustomAccessDecisionManager implements AccessDecisionManager {
+/**
+ * 动态权限决策管理器, {@link DynamicAccessDecisionManager} 类用于判断用户是否有其请求资源的访问权限
+ */
+public class DynamicAccessDecisionManager implements AccessDecisionManager {
     @Override
     public void decide(Authentication authentication, Object object, Collection<ConfigAttribute> configAttributes) throws AccessDeniedException, InsufficientAuthenticationException {
         if (CollectionUtil.isEmpty(configAttributes))

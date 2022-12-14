@@ -5,6 +5,8 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import java.io.Serializable;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
@@ -27,6 +29,7 @@ public class Permission implements Serializable {
 
     @Schema(description = "id")
     @TableId(value = "id", type = IdType.AUTO)
+    @JsonIgnore
     private Long id;
 
     @Schema(description = "权限")

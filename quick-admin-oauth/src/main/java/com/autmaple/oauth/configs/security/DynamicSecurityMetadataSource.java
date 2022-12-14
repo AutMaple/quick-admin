@@ -13,8 +13,12 @@ import org.springframework.util.AntPathMatcher;
 import java.util.*;
 import java.util.stream.Collectors;
 
+/**
+ * {@link DynamicSecurityMetadataSource} 类用于获取指定资源所需要的权限(角色)<br>
+ * 如果指定资源所需的权限返回 null，则表示没有给该资源设置任何的权限，所有用户均可访问
+ */
 @RequiredArgsConstructor
-public class CustomFilterInvocationSecurityMetadataSource implements FilterInvocationSecurityMetadataSource, InitializingBean {
+public class DynamicSecurityMetadataSource implements FilterInvocationSecurityMetadataSource, InitializingBean {
     private final PermissionMapper permissionMapper;
 
     private final AntPathMatcher antPathMatcher = new AntPathMatcher();
@@ -28,7 +32,7 @@ public class CustomFilterInvocationSecurityMetadataSource implements FilterInvoc
                 return permissionToRoles.get(permission);
             }
         }
-        return null;
+        return new ArrayList<>();
     }
 
     @Override

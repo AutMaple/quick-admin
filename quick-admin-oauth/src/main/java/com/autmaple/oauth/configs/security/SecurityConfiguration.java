@@ -59,12 +59,12 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Bean
     public AccessDecisionManager dynamicAccessDecisionManager() {
-        return new CustomAccessDecisionManager();
+        return new DynamicAccessDecisionManager();
     }
 
     @Bean
     public FilterInvocationSecurityMetadataSource dynamicMetadataSource() {
-        return new CustomFilterInvocationSecurityMetadataSource(permissionMapper);
+        return new DynamicSecurityMetadataSource(permissionMapper);
     }
 
     @Bean
