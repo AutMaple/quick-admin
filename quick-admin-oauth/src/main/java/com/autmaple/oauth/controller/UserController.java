@@ -1,9 +1,11 @@
 package com.autmaple.oauth.controller;
 
 import com.autmaple.oauth.configs.security.CustomUserDetails;
+import com.autmaple.oauth.entity.User;
 import com.autmaple.oauth.mapper.UserMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -17,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @since 2022-12-13
  */
 @RestController
-@RequestMapping("/oauth/user")
+@RequestMapping(value = "/oauth/user", produces = {"application/json;charset=UTF-8"})
 @RequiredArgsConstructor
 public class UserController {
     private final UserMapper userMapper;
@@ -27,8 +29,8 @@ public class UserController {
         return userMapper.getUserDetails(username);
     }
 
-    @GetMapping("/addUser")
-    public String addUser() {
+    @PostMapping("/addUser")
+    public String addUser(User user) {
         return "添加用户";
     }
 

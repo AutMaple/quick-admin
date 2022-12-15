@@ -16,7 +16,8 @@ public class Generator {
         String username = "root";
         String password = "root";
 
-        List<String> tables = Arrays.asList("auth_permission", "auth_role", "auth_role_permission", "auth_user", "auth_user_role");
+//        List<String> tables = Arrays.asList("auth_permission", "auth_role", "auth_role_permission", "auth_user", "auth_user_role");
+        List<String> tables = Arrays.asList("auth_user");
         List<String> prefix = Arrays.asList("auth_");
         String author = "AutMaple";
         // 模块名
@@ -38,7 +39,7 @@ public class Generator {
 
                             // mapper 相关的配置
                             .mapperBuilder()
-                            .enableFileOverride()
+//                            .enableFileOverride()
                             .enableMapperAnnotation() // 开启 mapper 注解
                             .formatMapperFileName("%sMapper")
                             .formatXmlFileName("%sMapper")
@@ -48,7 +49,7 @@ public class Generator {
                             .serviceBuilder()
                             .formatServiceFileName("%sService")
                             .formatServiceImplFileName("%sServiceImpl")
-                            .enableFileOverride()
+//                            .enableFileOverride()
 
                             // 实体类相关的配置
                             .entityBuilder()
@@ -59,7 +60,7 @@ public class Generator {
 
                             // controller 相关的配置
                             .controllerBuilder()
-                            .enableFileOverride()
+//                            .enableFileOverride()
                             .formatFileName("%sController");
                 })
                 .packageConfig(builder -> {
