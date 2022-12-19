@@ -1,3 +1,6 @@
+
+
+
 spring:
   security:
     user:
@@ -20,3 +23,9 @@ logging:
     org:
       springframework:
         security: debug
+server:
+  error:
+    include-stacktrace: always
+    include-message: always
+    include-exception: true
+    include-binding-errors: always

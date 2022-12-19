@@ -15,7 +15,7 @@ import lombok.Setter;
  * </p>
  *
  * @author AutMaple
- * @since 2022-12-15
+ * @since 2022-12-19
  */
 @Getter
 @Setter
@@ -41,7 +41,7 @@ public class User implements Serializable {
     @TableField("email")
     private String email;
 
-    @Schema(description = "性别：0 -> 男; 1-> 女;")
+    @Schema(description = "男/女/未知")
     @TableField("gender")
-    private Boolean gender;
+    private String gender;
 }
