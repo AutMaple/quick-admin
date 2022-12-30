@@ -35,7 +35,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     @Override
     public boolean updateUser(User user) {
-        String currentUsername  = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String currentUsername  = SecurityContextHolder.getContext().getAuthentication().getName();
         Map<String, Object> wrapper = new HashMap<>();
         wrapper.put("username", currentUsername);
         List<User> users = userMapper.selectByMap(wrapper);
