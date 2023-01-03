@@ -10,6 +10,7 @@
     <version>1.0-SNAPSHOT</version>
     <modules>
         <module>quick-admin-oauth</module>
+        <module>quick-admin-amqp</module>
     </modules>
 
     <properties>

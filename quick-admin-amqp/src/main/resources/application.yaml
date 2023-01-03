@@ -1,0 +1,11 @@
+rabbitmq:
+  host: localhost
+  port: 5672
+  username: guest
+  password: guest
+  virtualHost: "/device_data"
+  exchange: "com.yihuo.device.data"
+  rawQueueName: "com.yihuo.device.data.raw"
+  rawQueueKey: "com.yihuo.device.data.raw"
+  resolvedQueueName: "com.yihuo.device.data.resolved"
+  resolvedQueueKey: "com.yihuo.device.data.resolved"
