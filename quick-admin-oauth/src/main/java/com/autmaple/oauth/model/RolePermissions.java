@@ -3,6 +3,7 @@ package com.autmaple.oauth.model;
 import com.autmaple.oauth.entity.Permission;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import java.util.List;
 
@@ -11,7 +12,9 @@ import java.util.List;
  */
 @Getter
 @Setter
+@ToString
 public class RolePermissions {
+    private Long roleId;
     private String role;
     private List<Permission> permissions;
 }

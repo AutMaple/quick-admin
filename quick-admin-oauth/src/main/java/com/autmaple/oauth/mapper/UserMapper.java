@@ -2,7 +2,6 @@ package com.autmaple.oauth.mapper;
 
 import com.autmaple.oauth.configs.security.CustomUserDetails;
 import com.autmaple.oauth.entity.User;
-import com.autmaple.oauth.model.UserAuthentication;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -19,6 +18,7 @@ import org.apache.ibatis.annotations.Param;
 public interface UserMapper extends BaseMapper<User> {
     /**
      * 获取用户的角色信息
+     *
      * @param username 用户名
      */
     CustomUserDetails getUserDetails(@Param("username") String username);

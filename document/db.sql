@@ -59,40 +59,40 @@ CREATE TABLE `auth_role_permission`
   ROW_FORMAT = DYNAMIC COMMENT = '角色权限关联表';
 
 
-insert into auth_role(role)
-values ('admin');
-insert into auth_role(role)
-values ('teacher');
-insert into auth_role(role)
-values ('student');
-insert into auth_role(role)
-values ('primary');
-insert into auth_role(role)
-values ('monitor');
+INSERT INTO auth_role(role)
+VALUES ('admin');
+INSERT INTO auth_role(role)
+VALUES ('teacher');
+INSERT INTO auth_role(role)
+VALUES ('student');
+INSERT INTO auth_role(role)
+VALUES ('primary');
+INSERT INTO auth_role(role)
+VALUES ('monitor');
 
-insert into auth_user_role(user_id, role_id)
-values (1, 2);
-insert into auth_user_role(user_id, role_id)
-values (1, 4);
-insert into auth_user_role(user_id, role_id)
-values (1, 6);
-insert into auth_user_role(user_id, role_id)
-values (2, 1);
-insert into auth_user_role(user_id, role_id)
-values (2, 3);
-insert into auth_user_role(user_id, role_id)
-values (2, 5);
+INSERT INTO auth_user_role(user_id, role_id)
+VALUES (1, 2);
+INSERT INTO auth_user_role(user_id, role_id)
+VALUES (1, 4);
+INSERT INTO auth_user_role(user_id, role_id)
+VALUES (1, 6);
+INSERT INTO auth_user_role(user_id, role_id)
+VALUES (2, 1);
+INSERT INTO auth_user_role(user_id, role_id)
+VALUES (2, 3);
+INSERT INTO auth_user_role(user_id, role_id)
+VALUES (2, 5);
 
-insert into auth_permission(permission, `description`)
-values ('/auth/addUser/**', '添加用户');
-insert into auth_permission(permission, `description`)
-values ('/auth/getUser/**', '查询用户');
-insert into auth_permission(permission, `description`)
-values ('/auth/updateUser/**', '更新用户');
-insert into auth_permission(permission, `description`)
-values ('/auth/deleteUser/**', '删除用户');
-insert into auth_permission(permission, `description`)
-values ('/auth/getUsers/**', '分页查询用户');
+INSERT INTO auth_permission(permission, `description`)
+VALUES ('/auth/addUser/**', '添加用户');
+INSERT INTO auth_permission(permission, `description`)
+VALUES ('/auth/getUser/**', '查询用户');
+INSERT INTO auth_permission(permission, `description`)
+VALUES ('/auth/updateUser/**', '更新用户');
+INSERT INTO auth_permission(permission, `description`)
+VALUES ('/auth/deleteUser/**', '删除用户');
+INSERT INTO auth_permission(permission, `description`)
+VALUES ('/auth/getUsers/**', '分页查询用户');
 
 INSERT INTO quick_admin.auth_user (username, password, email, gender)
 VALUES ('AutMaple', '$2a$10$p3vrOPqOtjEgZt/WhP5/AuYzDcSjWvNBRUAKdhNK2qntu8pxknFp6', 'autmaple609@qq.com', b'00');
@@ -114,7 +114,76 @@ VALUES (6, 2, 5);
 INSERT INTO quick_admin.auth_role_permission (id, role_id, permission_id)
 VALUES (7, 2, 6);
 
-select p.permission, r.role
-from auth_permission p
-         left join auth_role_permission rp on p.id = rp.permission_id
-         left join auth_role r on rp.role_id = r.id;
+DROP TABLE IF EXISTS `auth_menu`;
+
+CREATE TABLE `auth_menu`
+(
+    `id`        BIGINT NOT NULL AUTO_INCREMENT COMMENT 'ID',
+    `name`      VARCHAR(50)  DEFAULT NULL COMMENT '菜单名',
+    `url`       VARCHAR(100) DEFAULT NULL COMMENT 'URL',
+    `icon`      VARCHAR(50)  DEFAULT NULL COMMENT 'ICON',
+    `parent_id` BIGINT       DEFAULT NULL COMMENT '父菜单 ID',
+    `level`     INT          DEFAULT NULL COMMENT '菜单层级',
+    PRIMARY KEY (`id`) USING BTREE
+) ENGINE = INNODB
+  DEFAULT CHARSET = UTF8MB4
+  ROW_FORMAT = DYNAMIC COMMENT '菜单表';
+
+DROP TABLE IF EXISTS `auth_menu_role`;
+
+CREATE TABLE `auth_menu_role`
+(
+    `id`      BIGINT NOT NULL AUTO_INCREMENT COMMEnt 'id',
+    `menu_id` BIGINT DEFAULT NULL COMMENT '菜单 ID',
+    `role_id` BIGINT DEFAULT NULL COMMENT '角色 ID',
+    PRIMARY KEY (`id`) USING BTREE
+) ENGINE = INNODB
+  DEFAULT CHARSET = UTF8MB4
+  ROW_FORMAT = DYNAMIC COMMENT = '角色菜单表';
+
+
+
+INSERT INTO quick_admin.auth_menu (name, url, icon, parent_id, level)
+VALUES ('首页', '/index', 'home', -1, 1);
+INSERT INTO quick_admin.auth_menu (name, url, icon, parent_id, level)
+VALUES ('组件', null, 'component', -1, 1);
+INSERT INTO quick_admin.auth_menu (name, url, icon, parent_id, level)
+VALUES ('角色权限', '/role/permissions', 'permission', 2, 2);
+INSERT INTO quick_admin.auth_menu (name, url, icon, parent_id, level)
+VALUES ('图标', null, 'icon', 2, 2);
+INSERT INTO quick_admin.auth_menu (name, url, icon, parent_id, level)
+VALUES ('表格', '/component/table', 'table', 2, 2);
+INSERT INTO quick_admin.auth_menu (name, url, icon, parent_id, level)
+VALUES ('常规图标', '/icon/normal', 'normalIcon', 4, 3);
+INSERT INTO quick_admin.auth_menu (name, url, icon, parent_id, level)
+VALUES ('多彩图标', '/icon/colorful', 'colorfulIcon', 4, 3);
+INSERT INTO quick_admin.auth_menu (name, url, icon, parent_id, level)
+VALUES ('地图', '/component/map', 'map', 2, 2);
+INSERT INTO quick_admin.auth_menu (name, url, icon, parent_id, level)
+VALUES ('配置', null, 'config', -1, 1);
+INSERT INTO quick_admin.auth_menu (name, url, icon, parent_id, level)
+VALUES ('用户管理', '/config/user', 'user', 9, 2);
+INSERT INTO quick_admin.auth_menu (name, url, icon, parent_id, level)
+VALUES ('角色管理', '/config/role', 'role', 9, 2);
+INSERT INTO quick_admin.auth_menu (name, url, icon, parent_id, level)
+VALUES ('菜单管理', '/config/menu', 'menu', 9, 2);
+
+
+INSERT INTO quick_admin.auth_menu_role (role_id, menu_id)
+VALUES (1, 1);
+INSERT INTO quick_admin.auth_menu_role (role_id, menu_id)
+VALUES (1, 3);
+INSERT INTO quick_admin.auth_menu_role (role_id, menu_id)
+VALUES (1, 5);
+INSERT INTO quick_admin.auth_menu_role (role_id, menu_id)
+VALUES (1, 6);
+INSERT INTO quick_admin.auth_menu_role (role_id, menu_id)
+VALUES (1, 7);
+INSERT INTO quick_admin.auth_menu_role (role_id, menu_id)
+VALUES (1, 8);
+INSERT INTO quick_admin.auth_menu_role (role_id, menu_id)
+VALUES (1, 10);
+INSERT INTO quick_admin.auth_menu_role (role_id, menu_id)
+VALUES (1, 11);
+INSERT INTO quick_admin.auth_menu_role (role_id, menu_id)
+VALUES (1, 12);

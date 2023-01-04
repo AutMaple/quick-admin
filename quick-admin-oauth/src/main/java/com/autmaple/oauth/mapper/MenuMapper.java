@@ -1,18 +1,18 @@
 package com.autmaple.oauth.mapper;
 
-import com.autmaple.oauth.entity.UserRole;
+import com.autmaple.oauth.entity.Menu;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
 
 /**
  * <p>
- * 用户角色关联表 Mapper 接口
+ * 菜单表 Mapper 接口
  * </p>
  *
  * @author AutMaple
- * @since 2022-12-13
+ * @since 2023-01-04
  */
 @Mapper
-public interface UserRoleMapper extends BaseMapper<UserRole> {
+public interface MenuMapper extends BaseMapper<Menu> {
 
 }

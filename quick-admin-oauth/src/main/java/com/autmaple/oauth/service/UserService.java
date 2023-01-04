@@ -2,7 +2,10 @@ package com.autmaple.oauth.service;
 
 import com.autmaple.oauth.configs.security.CustomUserDetails;
 import com.autmaple.oauth.entity.User;
+import com.autmaple.oauth.model.MenuNode;
 import com.baomidou.mybatisplus.extension.service.IService;
+
+import java.util.List;
 
 /**
  * <p>
@@ -15,6 +18,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 public interface UserService extends IService<User> {
     /**
      * 获取用户登录凭证的详细信息
+     *
      * @param username 用户名
      */
     CustomUserDetails getUserDetails(String username);
@@ -23,4 +27,11 @@ public interface UserService extends IService<User> {
      * 更新用户
      */
     boolean updateUser(User user);
+
+    /**
+     * 获取用户的菜单信息
+     *
+     * @param username 用户名
+     */
+    List<MenuNode> userMenus(String username);
 }

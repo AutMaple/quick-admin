@@ -11,17 +11,17 @@ import lombok.Setter;
 
 /**
  * <p>
- * 角色权限关联表
+ * 菜单表
  * </p>
  *
  * @author AutMaple
- * @since 2022-12-13
+ * @since 2023-01-04
  */
 @Getter
 @Setter
-@TableName("auth_role_permission")
-@Schema(name = "RolePermission", description = "角色权限关联表")
-public class RolePermission implements Serializable {
+@TableName("auth_menu")
+@Schema(name = "Menu", description = "菜单表")
+public class Menu implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -29,11 +29,23 @@ public class RolePermission implements Serializable {
     @TableId(value = "id", type = IdType.AUTO)
     private Long id;
 
-    @Schema(description = "角色 ID")
-    @TableField("role_id")
-    private Long roleId;
+    @Schema(description = "菜单名")
+    @TableField("name")
+    private String name;
 
-    @Schema(description = "权限 ID")
-    @TableField("permission_id")
-    private Long permissionId;
+    @Schema(description = "URL")
+    @TableField("url")
+    private String url;
+
+    @Schema(description = "ICON")
+    @TableField("icon")
+    private String icon;
+
+    @Schema(description = "父菜单 ID")
+    @TableField("parent_id")
+    private Long parentId;
+
+    @Schema(description = "菜单层级")
+    @TableField("level")
+    private Integer level;
 }

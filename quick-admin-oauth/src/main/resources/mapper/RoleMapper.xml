@@ -4,8 +4,56 @@
 
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="com.autmaple.oauth.entity.Role">
-        <id column="id" property="id" />
-        <result column="role" property="role" />
+        <id column="id" property="id"/>
+        <result column="role" property="role"/>
     </resultMap>
+
+    <resultMap id="rolePermissionsMap" type="com.autmaple.oauth.model.RolePermissions">
+        <id column="role_id" property="roleId"/>
+        <result column="role" property="role"/>
+        <collection property="permissions" ofType="com.autmaple.oauth.entity.Permission">
+            <result column="permission_id" property="id"/>
+            <result column="permission" property="permission"/>
+            <result column="description" property="description"/>
+        </collection>
+    </resultMap>
+
+    <resultMap id="roleMenusMap" type="com.autmaple.oauth.model.RoleMenus">
+        <id column="role_id" property="roleId"/>
+        <result column="role" property="roleName"/>
+        <collection property="menus" ofType="com.autmaple.oauth.entity.Menu">
+            <result column="menu_id" property="id"/>
+            <result column="name" property="name"/>
+            <result column="url" property="url"/>
+            <result property="icon" column="icon"/>
+            <result property="parentId" column="parent_id"/>
+        </collection>
+    </resultMap>
+
+    <select id="rolePermissions" resultMap="rolePermissionsMap">
+        select ar.id as role_id,
+               ar.role,
+               ap.id as permission_id,
+               ap.permission,
+               ap.description
+        from auth_role as ar
+                 left join auth_role_permission arp on ar.id = arp.role_id
+                 left join auth_permission ap on arp.permission_id = ap.id
+        where ar.id = #{roleId};
+    </select>
+
+    <select id="roleMenus" resultMap="roleMenusMap">
+        select ar.id as role_id,
+               ar.role,
+               am.id as menu_id,
+               am.name,
+               am.url,
+               am.icon,
+               am.parent_id
+        from auth_role as ar
+                 left join auth_menu_role amr on ar.id = amr.role_id
+                 left join auth_menu am on amr.menu_id = am.id
+        where ar.id = #{roleId};
+    </select>
 
 </mapper>

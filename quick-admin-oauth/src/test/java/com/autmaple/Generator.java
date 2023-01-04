@@ -16,12 +16,15 @@ public class Generator {
         String username = "root";
         String password = "root";
 
-//        List<String> tables = Arrays.asList("auth_permission", "auth_role", "auth_role_permission", "auth_user", "auth_user_role");
-        List<String> tables = Arrays.asList("auth_user");
+        // #region modify start
+        List<String> tables = Arrays.asList("auth_menu");
         List<String> prefix = Arrays.asList("auth_");
-        String author = "AutMaple";
         // 模块名
         String moduleName = "/quick-admin-oauth/";
+        // #region modify end
+
+
+        String author = "AutMaple";
         // mapper对应的 xml 文件存放的位置
         String mapperXmlLocation = System.getProperty("user.dir") + moduleName + "src/main/resources/mapper";
         String baseLocation = System.getProperty("user.dir") + moduleName + "src/main/java";

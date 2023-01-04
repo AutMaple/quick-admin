@@ -51,4 +51,9 @@ public class UserController {
         boolean success = userService.updateById(user);
         return success ? "更新用户成功" : "更新用户失败";
     }
+
+    @GetMapping("/menus")
+    public void userMenus(@RequestParam String username){
+
+    }
 }
