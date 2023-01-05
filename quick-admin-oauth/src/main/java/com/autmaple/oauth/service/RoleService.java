@@ -12,5 +12,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * @since 2022-12-13
  */
 public interface RoleService extends IService<Role> {
-
+    void userMenus(Long userId );
 }

@@ -56,4 +56,26 @@
         where ar.id = #{roleId};
     </select>
 
+    <select id="getRoleIds" resultType="java.lang.Long">
+        select aur.role_id
+        from auth_user_role as aur
+        where aur.user_id = #{userId};
+    </select>
+
+    <select id="getMenuIds" resultType="java.lang.Long">
+        select amr.menu_id
+        from auth_menu_role amr
+        where amr.role_id = #{roleId}
+    </select>
+    <select id="getMenus" resultType="com.autmaple.oauth.entity.Menu">
+        select am.id,
+               am.name,
+               am.url,
+               am.icon,
+               am.level,
+               am.parent_id
+        from auth_menu_role amr
+                 left join auth_menu am on amr.menu_id = am.id
+        where amr.role_id = #{roleId}
+    </select>
 </mapper>

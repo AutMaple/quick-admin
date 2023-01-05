@@ -1,6 +1,5 @@
 package com.autmaple.oauth.model;
 
-import com.autmaple.oauth.entity.Menu;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -9,12 +8,13 @@ import java.util.Objects;
 
 @Getter
 @Setter
-public class MenuNode extends Menu {
+public class MenuNode {
     private Long id;
     private String name;
     private String url;
     private String icon;
     private Long parentId;
+    private Integer level;
     private List<MenuNode> childMenus;
 
     @Override

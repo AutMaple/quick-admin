@@ -4,10 +4,13 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import java.io.Serializable;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
+
+import java.io.Serializable;
+import java.util.Objects;
 
 /**
  * <p>
@@ -19,6 +22,7 @@ import lombok.Setter;
  */
 @Getter
 @Setter
+@ToString
 @TableName("auth_menu")
 @Schema(name = "Menu", description = "菜单表")
 public class Menu implements Serializable {
@@ -48,4 +52,21 @@ public class Menu implements Serializable {
     @Schema(description = "菜单层级")
     @TableField("level")
     private Integer level;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o)
+            return true;
+        if (o == null)
+            return false;
+        if (getClass() != o.getClass())
+            return false;
+        Menu other = (Menu) o;
+        return Objects.equals(this.id, other.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return this.id.hashCode();
+    }
 }
