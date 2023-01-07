@@ -3,8 +3,10 @@ package com.autmaple.oauth.mapper;
 
 import cn.hutool.json.JSONUtil;
 import com.autmaple.oauth.entity.Menu;
+import com.autmaple.oauth.model.MenuNode;
 import com.autmaple.oauth.model.RoleMenus;
 import com.autmaple.oauth.model.RolePermissions;
+import com.autmaple.oauth.service.RoleServiceTest;
 import com.baomidou.mybatisplus.test.autoconfigure.MybatisPlusTest;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +19,9 @@ import java.util.List;
 public class RoleMapperTest {
     @Autowired
     private RoleMapper roleMapper;
+
+    @Autowired
+    private RoleServiceTest roleService;
 
     @Test
     void rolePermission() {

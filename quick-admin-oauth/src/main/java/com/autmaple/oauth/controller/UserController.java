@@ -3,7 +3,7 @@ package com.autmaple.oauth.controller;
 import com.autmaple.oauth.configs.security.CustomUserDetails;
 import com.autmaple.oauth.dto.UserDto;
 import com.autmaple.oauth.entity.User;
-import com.autmaple.oauth.mapstruct.UserMapper;
+import com.autmaple.oauth.mapstruct.UserDtoMapper;
 import com.autmaple.oauth.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -43,7 +43,7 @@ public class UserController {
     @GetMapping("/getUser/{id}")
     public UserDto getUser(@PathVariable Long id) {
         User user = userService.getById(id);
-        return UserMapper.INSTANCE.uer2UserDto(user);
+        return UserDtoMapper.INSTANCE.uer2UserDto(user);
     }
 
     @PostMapping("/updateUser")

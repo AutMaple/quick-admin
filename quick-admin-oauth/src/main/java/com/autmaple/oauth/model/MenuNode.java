@@ -3,6 +3,7 @@ package com.autmaple.oauth.model;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -16,6 +17,10 @@ public class MenuNode {
     private Long parentId;
     private Integer level;
     private List<MenuNode> childMenus;
+
+    public MenuNode() {
+        this.childMenus = new ArrayList<>();
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -32,5 +37,9 @@ public class MenuNode {
     @Override
     public int hashCode() {
         return this.id.hashCode();
+    }
+
+    public void addChildMenu(MenuNode menuNode) {
+        this.childMenus.add(menuNode);
     }
 }

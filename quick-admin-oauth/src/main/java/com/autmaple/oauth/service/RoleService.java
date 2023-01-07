@@ -1,7 +1,10 @@
 package com.autmaple.oauth.service;
 
 import com.autmaple.oauth.entity.Role;
+import com.autmaple.oauth.model.MenuNode;
 import com.baomidou.mybatisplus.extension.service.IService;
+
+import java.util.List;
 
 /**
  * <p>
@@ -12,5 +15,10 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * @since 2022-12-13
  */
 public interface RoleService extends IService<Role> {
-    void userMenus(Long userId );
+    /**
+     * 获取用户全部的菜单
+     *
+     * @param userId 用户 ID
+     */
+    List<MenuNode> userMenus(Long userId);
 }
