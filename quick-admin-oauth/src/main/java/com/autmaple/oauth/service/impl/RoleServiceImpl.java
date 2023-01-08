@@ -11,7 +11,10 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -31,34 +34,11 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
     @Override
     public List<MenuNode> allMenus() {
         List<Menu> allMenus = menuMapper.selectList(null);
-        Map<Integer, HashSet<Menu>> allMenuMap = new HashMap<>();
-        for (Menu menu : allMenus) {
-            HashSet<Menu> menuSet = allMenuMap.computeIfAbsent(menu.getLevel(), (key) -> new HashSet<>());
-            menuSet.add(menu);
-        }
-
-        Map<Long, MenuNode> menuNodeMap = new HashMap<>();
-        for (Menu menu : allMenus) {
-            Long parentId = menu.getParentId();
-            if (parentId == -1) { // 一级菜单
-                MenuNode menuNode = MenuNodeMapper.INSTANCE.menuToMenuNode(menu);
-                menuNodeMap.put(menu.getId(), menuNode);
-            } else {
-                MenuNode parentNode = menuNodeMap.computeIfAbsent(parentId,
-                        (parentKey) -> findParentNode(menu, allMenuMap, menuNodeMap));
-                MenuNode childNode = MenuNodeMapper.INSTANCE.menuToMenuNode(menu);
-                parentNode.addChildMenu(childNode);
-                menuNodeMap.put(childNode.getId(), childNode);
-            }
-        }
-
-        List<MenuNode> result = new ArrayList<>();
-        for (Menu menu : allMenuMap.getOrDefault(1, new HashSet<>())) { // 获取顶级节点
-            MenuNode menuNode = menuNodeMap.get(menu.getId());
-            if (menuNode != null)
-                result.add(menuNode);
-        }
-        return result;
+        Map<Long, MenuNode> menuNodeMap = buildMenuTree(allMenus, allMenus);
+        return menuNodeMap.values()
+                .stream()
+                .filter(menuNode -> menuNode.getLevel() == 1)
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -66,45 +46,55 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
         // 1. 首先获取用户的角色
         List<Long> roleIds = roleMapper.getRoleIds(userId);
 
-        // 2. 获取角色对应的菜单,并进行去重操作
-        Set<Menu> rolesMenuSet = new HashSet<>();
-        for (Long roleId : roleIds) {
-            List<Menu> roleMenus = roleMapper.getMenus(roleId);
-            rolesMenuSet.addAll(roleMenus);
-        }
-        // 3. 获取项目所有的菜单项, 并将菜单按照层级分类, 方便后续构建菜单
-        List<Menu> allMenus = menuMapper.selectList(null);
-        Map<Integer, HashSet<Menu>> allMenuMap = new HashMap<>();
-        for (Menu menu : allMenus) {
-            HashSet<Menu> menuSet = allMenuMap.computeIfAbsent(menu.getLevel(), (key) -> new HashSet<>());
-            menuSet.add(menu);
-        }
+        // 2. 获取所有角色对应的菜单,并进行去重操作
+        List<Menu> userMenus = roleIds
+                .stream()
+                .map(roleMapper::getMenus)
+                .flatMap(Collection::stream)
+                .distinct()
+                .collect(Collectors.toList());
 
-        // 4. 找出各菜单的祖先结点，从而构建出菜单树
-        // key: 菜单 ID
+        // 3. 获取项目所有的菜单项
+        List<Menu> allMenus = menuMapper.selectList(null);
+
+        // 4. 构建菜单树
+        Map<Long, MenuNode> menuNodeMap = buildMenuTree(allMenus, userMenus);
+
+        // 5. 挑选出一级菜单作为结果返回
+        return menuNodeMap.values().stream()
+                .filter(menuNode -> menuNode.getLevel() == 1)
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * 根据项目中用户菜单和项目中所有的菜单构建出用户的菜单树
+     *
+     * @param allMenus  项目中所有的菜单项
+     * @param userMenus 用户拥有的菜单项
+     * @return 构建好的用户菜单树
+     */
+    private Map<Long, MenuNode> buildMenuTree(List<Menu> allMenus, List<Menu> userMenus) {
+        Map<Long, Menu> allMenusMap = allMenus
+                .stream()
+                .collect(Collectors.toMap(Menu::getId, menu -> menu));
+
         Map<Long, MenuNode> menuNodeMap = new HashMap<>();
-        for (Menu menu : rolesMenuSet) {
+        for (Menu menu : userMenus) {
             Long parentId = menu.getParentId();
             if (parentId == -1) { // 一级菜单
                 MenuNode menuNode = MenuNodeMapper.INSTANCE.menuToMenuNode(menu);
                 menuNodeMap.put(menu.getId(), menuNode);
             } else {
-                MenuNode parentNode = menuNodeMap.computeIfAbsent(parentId,
-                        (parentKey) -> findParentNode(menu, allMenuMap, menuNodeMap));
+                MenuNode parentNode = menuNodeMap.computeIfAbsent(
+                        parentId,
+                        (parentKey) -> findParentNode(menu, allMenusMap, menuNodeMap)
+                );
                 MenuNode childNode = MenuNodeMapper.INSTANCE.menuToMenuNode(menu);
                 parentNode.addChildMenu(childNode);
                 menuNodeMap.put(childNode.getId(), childNode);
             }
         }
-
-        // 5. 将一级菜单放入到集合中作为结果返回
-        List<MenuNode> result = new ArrayList<>();
-        for (Menu menu : allMenuMap.getOrDefault(1, new HashSet<>())) { // 获取顶级节点
-            MenuNode menuNode = menuNodeMap.get(menu.getId());
-            if (menuNode != null)
-                result.add(menuNode);
-        }
-        return result;
+        return menuNodeMap;
     }
 
     /**
@@ -116,55 +106,32 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
      * @return 父菜单
      */
     private MenuNode findParentNode(Menu childMenu,
-                                    Map<Integer, HashSet<Menu>> allMenuMap,
+                                    Map<Long, Menu> allMenuMap,
                                     Map<Long, MenuNode> menuNodeMap) {
         Long parentId = childMenu.getParentId();
-        Integer parentLevel = childMenu.getLevel() - 1;
         MenuNode parentMenuNode = menuNodeMap.get(parentId);
 
-        // 如果父级菜单已经存在了，直接返回即可
+        // 1. 如果父级菜单已经存在了，直接返回即可
         if (parentMenuNode != null)
             return parentMenuNode;
 
-        // 父级菜单不存在且父级菜单是一级菜单，则创建一级菜单并返回
+        int parentLevel = childMenu.getLevel() - 1;
+
+        // 2. 父级菜单不存在且父级菜单是一级菜单，则创建一级菜单并返回
         if (parentLevel == 1) {
-            for (Menu menu : allMenuMap.get(parentLevel)) {
-                if (Objects.equals(menu.getId(), parentId)) {
-                    parentMenuNode = MenuNodeMapper.INSTANCE.menuToMenuNode(menu);
-                    menuNodeMap.put(parentId, parentMenuNode);
-                    return parentMenuNode;
-                }
-            }
+            Menu menu = allMenuMap.get(parentId);
+            parentMenuNode = MenuNodeMapper.INSTANCE.menuToMenuNode(menu);
+            menuNodeMap.put(parentId, parentMenuNode);
+            return parentMenuNode;
         }
 
-        // 父级菜单不存在且父级菜单是非一级菜单, 则先递归的构建祖先节点
-        for (Menu menu : allMenuMap.get(parentLevel)) {
-            if (Objects.equals(menu.getId(), parentId)) {
-                MenuNode ancestorNode = findParentNode(menu, allMenuMap, menuNodeMap);
-                parentMenuNode = MenuNodeMapper.INSTANCE.menuToMenuNode(menu);
-                if (!isChildMenu(parentMenuNode, ancestorNode))
-                    ancestorNode.addChildMenu(parentMenuNode);
-                menuNodeMap.put(parentId, parentMenuNode);
-            }
-        }
+        // 3. 父级菜单不存在且父级菜单是非一级菜单, 则先递归的构建祖先节点
+        Menu menu = allMenuMap.get(parentId);
+        MenuNode ancestorNode = findParentNode(menu, allMenuMap, menuNodeMap);
+        parentMenuNode = MenuNodeMapper.INSTANCE.menuToMenuNode(menu);
+        if (!ancestorNode.haveChildMenu(parentMenuNode))
+            ancestorNode.addChildMenu(parentMenuNode);
+        menuNodeMap.put(parentId, parentMenuNode);
         return parentMenuNode;
-    }
-
-    /**
-     * 判断 childMenu 是否是 parentMenu 的子菜单
-     *
-     * @param childMenu  子菜单
-     * @param parentMenu 父菜单
-     * @return 是则返回 true，否则返回 false
-     */
-    private boolean isChildMenu(MenuNode childMenu, MenuNode parentMenu) {
-        if (parentMenu == null || childMenu == null)
-            return false;
-        List<MenuNode> menus = parentMenu.getChildMenus();
-        for (MenuNode menu : menus) {
-            if (Objects.equals(menu.getId(), childMenu.getId()))
-                return true;
-        }
-        return false;
     }
 }
