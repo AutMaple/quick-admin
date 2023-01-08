@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * <p>
@@ -26,6 +27,39 @@ import java.util.*;
 public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements RoleService {
     private final RoleMapper roleMapper;
     private final MenuMapper menuMapper;
+
+    @Override
+    public List<MenuNode> allMenus() {
+        List<Menu> allMenus = menuMapper.selectList(null);
+        Map<Integer, HashSet<Menu>> allMenuMap = new HashMap<>();
+        for (Menu menu : allMenus) {
+            HashSet<Menu> menuSet = allMenuMap.computeIfAbsent(menu.getLevel(), (key) -> new HashSet<>());
+            menuSet.add(menu);
+        }
+
+        Map<Long, MenuNode> menuNodeMap = new HashMap<>();
+        for (Menu menu : allMenus) {
+            Long parentId = menu.getParentId();
+            if (parentId == -1) { // 一级菜单
+                MenuNode menuNode = MenuNodeMapper.INSTANCE.menuToMenuNode(menu);
+                menuNodeMap.put(menu.getId(), menuNode);
+            } else {
+                MenuNode parentNode = menuNodeMap.computeIfAbsent(parentId,
+                        (parentKey) -> findParentNode(menu, allMenuMap, menuNodeMap));
+                MenuNode childNode = MenuNodeMapper.INSTANCE.menuToMenuNode(menu);
+                parentNode.addChildMenu(childNode);
+                menuNodeMap.put(childNode.getId(), childNode);
+            }
+        }
+
+        List<MenuNode> result = new ArrayList<>();
+        for (Menu menu : allMenuMap.getOrDefault(1, new HashSet<>())) { // 获取顶级节点
+            MenuNode menuNode = menuNodeMap.get(menu.getId());
+            if (menuNode != null)
+                result.add(menuNode);
+        }
+        return result;
+    }
 
     @Override
     public List<MenuNode> userMenus(Long userId) {

@@ -21,4 +21,9 @@ public interface RoleService extends IService<Role> {
      * @param userId 用户 ID
      */
     List<MenuNode> userMenus(Long userId);
+
+    /**
+     * 获取项目所有的菜单
+     */
+    List<MenuNode> allMenus();
 }

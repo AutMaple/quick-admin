@@ -4,9 +4,13 @@ import com.autmaple.oauth.configs.security.CustomUserDetails;
 import com.autmaple.oauth.dto.UserDto;
 import com.autmaple.oauth.entity.User;
 import com.autmaple.oauth.mapstruct.UserDtoMapper;
+import com.autmaple.oauth.model.MenuNode;
+import com.autmaple.oauth.service.RoleService;
 import com.autmaple.oauth.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * <p>
@@ -21,6 +25,8 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class UserController {
     private final UserService userService;
+
+    private final RoleService roleService;
 
     @GetMapping("/authentication")
     public CustomUserDetails getUserAuthentication(@RequestParam String username) {
@@ -53,7 +59,7 @@ public class UserController {
     }
 
     @GetMapping("/menus")
-    public void userMenus(@RequestParam String username){
-
+    public List<MenuNode> userMenus(@RequestParam("userId") Long userId) {
+        return roleService.userMenus(userId);
     }
 }

@@ -17,7 +17,6 @@ import java.util.Map;
  * 响应结果统一处理类
  */
 @SuppressWarnings({"rawtypes"})
-//@RestControllerAdvice
 @ControllerAdvice
 public class ResponseAdvice implements ResponseBodyAdvice {
     private final ObjectMapper objectMapper = new ObjectMapper();

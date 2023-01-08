@@ -1,13 +1,10 @@
 package com.autmaple.oauth.controller;
 
-import com.autmaple.oauth.entity.Menu;
 import com.autmaple.oauth.model.MenuNode;
-import com.autmaple.oauth.service.MenuService;
+import com.autmaple.oauth.service.RoleService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -24,5 +21,11 @@ import java.util.List;
 @RequestMapping("/oauth/menu")
 @RequiredArgsConstructor
 public class MenuController {
+    private final RoleService roleService;
 
+
+    @GetMapping("/all")
+    public List<MenuNode> allMenus() {
+        return roleService.allMenus();
+    }
 }
