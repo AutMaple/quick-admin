@@ -37,7 +37,7 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
         Map<Long, MenuNode> menuNodeMap = buildMenuTree(allMenus, allMenus);
         return menuNodeMap.values()
                 .stream()
-                .filter(menuNode -> menuNode.getParentId() == 1)
+                .filter(menuNode -> menuNode.getParentId() == -1)
                 .collect(Collectors.toList());
     }
 
