@@ -123,7 +123,6 @@ CREATE TABLE `auth_menu`
     `url`       VARCHAR(100) DEFAULT NULL COMMENT 'URL',
     `icon`      VARCHAR(50)  DEFAULT NULL COMMENT 'ICON',
     `parent_id` BIGINT       DEFAULT NULL COMMENT '父菜单 ID',
-    `level`     INT          DEFAULT NULL COMMENT '菜单层级',
     PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = INNODB
   DEFAULT CHARSET = UTF8MB4
@@ -141,33 +140,30 @@ CREATE TABLE `auth_menu_role`
   DEFAULT CHARSET = UTF8MB4
   ROW_FORMAT = DYNAMIC COMMENT = '角色菜单表';
 
-
-
-INSERT INTO quick_admin.auth_menu (name, url, icon, parent_id, level)
-VALUES ('首页', '/index', 'home', -1, 1);
-INSERT INTO quick_admin.auth_menu (name, url, icon, parent_id, level)
-VALUES ('组件', null, 'component', -1, 1);
-INSERT INTO quick_admin.auth_menu (name, url, icon, parent_id, level)
-VALUES ('角色权限', '/role/permissions', 'permission', 2, 2);
-INSERT INTO quick_admin.auth_menu (name, url, icon, parent_id, level)
-VALUES ('图标', null, 'icon', 2, 2);
-INSERT INTO quick_admin.auth_menu (name, url, icon, parent_id, level)
-VALUES ('表格', '/component/table', 'table', 2, 2);
-INSERT INTO quick_admin.auth_menu (name, url, icon, parent_id, level)
-VALUES ('常规图标', '/icon/normal', 'normalIcon', 4, 3);
-INSERT INTO quick_admin.auth_menu (name, url, icon, parent_id, level)
-VALUES ('多彩图标', '/icon/colorful', 'colorfulIcon', 4, 3);
-INSERT INTO quick_admin.auth_menu (name, url, icon, parent_id, level)
-VALUES ('地图', '/component/map', 'map', 2, 2);
-INSERT INTO quick_admin.auth_menu (name, url, icon, parent_id, level)
-VALUES ('配置', null, 'config', -1, 1);
-INSERT INTO quick_admin.auth_menu (name, url, icon, parent_id, level)
-VALUES ('用户管理', '/config/user', 'user', 9, 2);
-INSERT INTO quick_admin.auth_menu (name, url, icon, parent_id, level)
-VALUES ('角色管理', '/config/role', 'role', 9, 2);
-INSERT INTO quick_admin.auth_menu (name, url, icon, parent_id, level)
-VALUES ('菜单管理', '/config/menu', 'menu', 9, 2);
-
+INSERT INTO quick_admin.auth_menu (id, name, url, icon, parent_id)
+VALUES (1, '首页', '/index', 'home', -1);
+INSERT INTO quick_admin.auth_menu (id, name, url, icon, parent_id)
+VALUES (2, '组件', null, 'component', -1);
+INSERT INTO quick_admin.auth_menu (id, name, url, icon, parent_id)
+VALUES (3, '角色权限', '/role/permissions', 'permission', 2);
+INSERT INTO quick_admin.auth_menu (id, name, url, icon, parent_id)
+VALUES (4, '图标', null, 'icon', 2);
+INSERT INTO quick_admin.auth_menu (id, name, url, icon, parent_id)
+VALUES (5, '表格', '/component/table', 'table', 2);
+INSERT INTO quick_admin.auth_menu (id, name, url, icon, parent_id)
+VALUES (6, '常规图标', '/icon/normal', 'normalIcon', 4);
+INSERT INTO quick_admin.auth_menu (id, name, url, icon, parent_id)
+VALUES (7, '多彩图标', '/icon/colorful', 'colorfulIcon', 4);
+INSERT INTO quick_admin.auth_menu (id, name, url, icon, parent_id)
+VALUES (8, '地图', '/component/map', 'map', 2);
+INSERT INTO quick_admin.auth_menu (id, name, url, icon, parent_id)
+VALUES (9, '配置', null, 'config', -1);
+INSERT INTO quick_admin.auth_menu (id, name, url, icon, parent_id)
+VALUES (10, '用户管理', '/config/user', 'user', 9);
+INSERT INTO quick_admin.auth_menu (id, name, url, icon, parent_id)
+VALUES (11, '角色管理', '/config/role', 'role', 9);
+INSERT INTO quick_admin.auth_menu (id, name, url, icon, parent_id)
+VALUES (12, '菜单管理', '/config/menu', 'menu', 9);
 
 INSERT INTO quick_admin.auth_menu_role (role_id, menu_id)
 VALUES (1, 1);

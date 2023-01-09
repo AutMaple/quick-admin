@@ -15,9 +15,9 @@ public class RoleServiceTest {
 
     @Test
     void userMenus() {
-        List<MenuNode> userMenus = roleService.userMenus(1L);
+        List<MenuNode> userMenus = roleService.userMenus(2L);
         System.out.println(JSONUtil.toJsonStr(userMenus));
-        List<MenuNode> allMenus = roleService.allMenus();
-        System.out.println(JSONUtil.toJsonStr(allMenus));
+        List<MenuNode> irvinMenus = roleService.userMenus(1L);
+        System.out.println(JSONUtil.toJsonStr(irvinMenus));
     }
 }

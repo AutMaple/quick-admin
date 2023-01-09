@@ -72,7 +72,6 @@
                am.name,
                am.url,
                am.icon,
-               am.level,
                am.parent_id
         from auth_menu_role amr
                  left join auth_menu am on amr.menu_id = am.id

@@ -49,10 +49,6 @@ public class Menu implements Serializable {
     @TableField("parent_id")
     private Long parentId;
 
-    @Schema(description = "菜单层级")
-    @TableField("level")
-    private Integer level;
-
     @Override
     public boolean equals(Object o) {
         if (this == o)

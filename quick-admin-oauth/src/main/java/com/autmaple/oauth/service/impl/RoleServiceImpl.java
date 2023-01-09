@@ -37,7 +37,7 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
         Map<Long, MenuNode> menuNodeMap = buildMenuTree(allMenus, allMenus);
         return menuNodeMap.values()
                 .stream()
-                .filter(menuNode -> menuNode.getLevel() == 1)
+                .filter(menuNode -> menuNode.getParentId() == 1)
                 .collect(Collectors.toList());
     }
 
@@ -62,7 +62,7 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
 
         // 5. 挑选出一级菜单作为结果返回
         return menuNodeMap.values().stream()
-                .filter(menuNode -> menuNode.getLevel() == 1)
+                .filter(menuNode -> menuNode.getParentId() == -1)
                 .collect(Collectors.toList());
     }
 
@@ -85,10 +85,9 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
                 MenuNode menuNode = MenuNodeMapper.INSTANCE.menuToMenuNode(menu);
                 menuNodeMap.put(menu.getId(), menuNode);
             } else {
-                MenuNode parentNode = menuNodeMap.computeIfAbsent(
-                        parentId,
-                        (parentKey) -> findParentNode(menu, allMenusMap, menuNodeMap)
-                );
+                MenuNode parentNode = menuNodeMap.get(parentId);
+                if (parentNode == null)
+                    parentNode = findParentNode(menu, allMenusMap, menuNodeMap);
                 MenuNode childNode = MenuNodeMapper.INSTANCE.menuToMenuNode(menu);
                 parentNode.addChildMenu(childNode);
                 menuNodeMap.put(childNode.getId(), childNode);
@@ -110,27 +109,20 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
                                     Map<Long, MenuNode> menuNodeMap) {
         Long parentId = childMenu.getParentId();
         MenuNode parentMenuNode = menuNodeMap.get(parentId);
-
-        // 1. 如果父级菜单已经存在了，直接返回即可
-        if (parentMenuNode != null)
+        // 1. 如果菜单是一级菜单则返回 null, 因为一级菜单没有父级菜单
+        // 2. 如果父级菜单已经存在了，直接返回即可
+        if (parentId == -1 || parentMenuNode != null)
             return parentMenuNode;
-
-        int parentLevel = childMenu.getLevel() - 1;
-
-        // 2. 父级菜单不存在且父级菜单是一级菜单，则创建一级菜单并返回
-        if (parentLevel == 1) {
-            Menu menu = allMenuMap.get(parentId);
-            parentMenuNode = MenuNodeMapper.INSTANCE.menuToMenuNode(menu);
-            menuNodeMap.put(parentId, parentMenuNode);
-            return parentMenuNode;
-        }
 
         // 3. 父级菜单不存在且父级菜单是非一级菜单, 则先递归的构建祖先节点
         Menu menu = allMenuMap.get(parentId);
         MenuNode ancestorNode = findParentNode(menu, allMenuMap, menuNodeMap);
         parentMenuNode = MenuNodeMapper.INSTANCE.menuToMenuNode(menu);
-        if (!ancestorNode.haveChildMenu(parentMenuNode))
+
+        // 如果 ancestorNode 为 null，说明当前节点为一级菜单, 直接放入 menuNodeMap 即可
+        if (ancestorNode != null && !ancestorNode.haveChildMenu(parentMenuNode))
             ancestorNode.addChildMenu(parentMenuNode);
+
         menuNodeMap.put(parentId, parentMenuNode);
         return parentMenuNode;
     }

@@ -15,7 +15,6 @@ public class MenuNode {
     private String url;
     private String icon;
     private Long parentId;
-    private Integer level;
     private Set<MenuNode> childMenus;
 
     public MenuNode() {
